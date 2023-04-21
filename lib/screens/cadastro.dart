@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -21,7 +23,10 @@ class Cadastrar extends StatelessWidget {
             children: [
               const Text("Cadastro", style: TextStyle(fontSize: 32),),
               usernameFormField(),
+              emailFormField(),
+              sexoFormField(1),
               passwordFormField(),
+              passwordConfirmationFormField(),
               Container(
                 width: 170,
                 height: 50,
@@ -44,13 +49,33 @@ class Cadastrar extends StatelessWidget {
   }
 }
 
+
 Widget usernameFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.name,
+      validator: (String? inValue) {
+        if (inValue != null) {
+          if (inValue.isEmpty) {
+            return "Nome de usuário";
+          }
+        }
+        return null;
+      },
+      
+      decoration: const InputDecoration(
+        hintText: "Insira seu username",
+        labelText: "Nome de usuário",
+      ),
+    );
+  }
+
+Widget emailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       validator: (String? inValue) {
         if (inValue != null) {
           if (inValue.isEmpty) {
-            return "Insira um nome de usuário";
+            return "Insira seu email";
           }
         }
         return null;
@@ -58,10 +83,50 @@ Widget usernameFormField() {
       
       decoration: const InputDecoration(
         hintText: "user@domain.br",
-        labelText: "Username (E-mail Address)",
+        labelText: "E-mail",
       ),
     );
   }
+
+String? genero;
+
+  Widget sexoFormField(int value){
+    return Column(
+      children: [
+        RadioListTile(
+      title: Text("Feminino"),
+      value: "Feminino",
+      groupValue: genero, // Valor do grupo
+      onChanged: (value) {   
+          /*setState(() {
+            genero = value.toString();
+          });*/
+        
+      },),
+      RadioListTile(
+      title: Text("Masculino"),
+      value: "Masculino",
+      groupValue: genero, // Valor do grupo
+      onChanged: (value) {   
+          /*setState(() {
+            genero = value.toString();
+          });*/
+        
+      },),
+      RadioListTile(
+      title: Text("Outro"),
+      value: "Outro",
+      groupValue: genero, // Valor do grupo
+      onChanged: (value) {   
+          /*setState(() {
+            genero = value.toString();
+          });*/
+        
+      },),
+
+      ],
+    );
+  } 
 
   Widget passwordFormField() {
     return TextFormField(
@@ -76,7 +141,25 @@ Widget usernameFormField() {
       },
       
       decoration: const InputDecoration(
-        labelText: "Insira uma senha forte",
+        labelText: "Senha",
+      ),
+    );
+  }
+
+    Widget passwordConfirmationFormField() {
+    return TextFormField(
+      obscureText: true,
+      validator: (String? inValue) {
+        if (inValue != null) {
+          if (inValue.length < 10) {
+            return "Confirme sua senha";
+          }
+        }
+        return null;
+      },
+      
+      decoration: const InputDecoration(
+        labelText: "Confirme sua senha",
       ),
     );
   }

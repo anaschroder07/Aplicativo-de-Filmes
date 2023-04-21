@@ -2,13 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-class Avaliacoes extends StatelessWidget {
-  const Avaliacoes ({super.key});
+class Assistidos extends StatelessWidget {
+  const Assistidos ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        ListTile(
+          contentPadding: const EdgeInsets.all(20.0),
+          title: Text("Tudo em todo lugar ao mesmo tempo"),
+          subtitle: Text("Nao sabia se ria, se chorava, mas é muito bom!!!"),
+          leading: FittedBox(            
+          fit: BoxFit.fill,          
+          child: Image.network('https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRUIm9P_8LVR6KHcFvTvYvxjshn9I3oGdwZWqK7Svtx6InZHtje')
+        ),
+        trailing: FittedBox(
+          fit: BoxFit.fill,
+          child: Row(
+          children: const <Widget>[
+            Icon(Icons.star),
+            Icon(Icons.star),
+            Icon(Icons.star),
+            Icon(Icons.star_half),
+            Icon(Icons.star_border),
+          ],
+          ),
+        ),
+        onTap: (){},
+        ),
+
+
         ListTile(
           contentPadding: const EdgeInsets.all(15.0),
           title: const Text("Creed I"),

@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:trabalho1/screens/assistidos.dart';
 
 import '../main.dart';
 import 'avaliacoes.dart';
 import 'catalogo.dart';
 
-class Inicial extends StatelessWidget {
-  const Inicial({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ElevatedButton(
-            onPressed: () {
-              
-            },
-            child: const Text("jonas")),
-      ]
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -45,9 +31,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: IndexedStack(
           index: _currentScreen,
           children: const [
-            Inicial(),
             Catalogo(),
-            Avaliacoes()
+            Avaliacoes(),
+            Assistidos(),
           ]
         ),
         /*Column(
@@ -71,8 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
           ),
+          
           ListTile(
-            title: const Text("Inicial"),
+            title: const Text("Catálogo"),
             onTap: (){
               setState(() {
                 _currentScreen = 0;
@@ -81,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            title: const Text("Catálogo"),
+            title: const Text("Avaliações"),
             onTap: (){
               setState(() {
                 _currentScreen = 1;
@@ -90,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            title: const Text("Avaliações"),
+            title: const Text("Assistidos"),
             onTap: (){
               setState(() {
                 _currentScreen = 2;
@@ -99,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            title: const Text("Assistidos"),
+            title: const Text("Conta"),
             onTap: (){
               setState(() {
                 _currentScreen = 3;
@@ -108,19 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            title: const Text("Conta"),
-            onTap: (){
-              setState(() {
-                _currentScreen = 4;
-              });
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             title: const Text("Logout"),
             onTap: (){
               Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  Login(title: "Cadastro",)));
+                    MaterialPageRoute(builder: (context) =>  Login(title: "Login",)));
             },
           ),
         ]),
