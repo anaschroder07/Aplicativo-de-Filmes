@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trabalho1/screens/avaliacoes.dart';
+import 'package:trabalho1/screens/avaliar.dart';
 import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
 import 'package:trabalho1/screens/login.dart';
@@ -38,40 +39,72 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        
-        //width: 300,
+      body:Container(
         alignment: Alignment.center,
         child: Form(
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text("Login", style: TextStyle(fontSize: 32),),
+              Container(
+                alignment: Alignment.center,
+                margin: const EdgeInsets.only(top: 5),
+                  padding: const EdgeInsets.all(0),   
+                
+                child: const Text("Descrição", style: TextStyle(fontSize: 32),),
+              ),
+              Container(
+                alignment: Alignment.center,
+                 padding: const EdgeInsets.all(0),   
+                margin: const EdgeInsets.all(10),  
+                child: const Text("O projeto escolhido trata-se de uma plataforma para visualização e avaliação de filmes e séries que utiliza a API TMDB (The Movie Database) e armazena dados no banco de dados Firebase. O aplicativo permite ao usuário pesquisar por títulos de filmes e séries, visualizar informações sobre eles, como, por exemplo, descrição e elenco, além de permitir a avaliação dos títulos por meio de notas e comentários que serão armazenados em uma lista mantida no banco de dados."),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 200,
+                    height: 200,
+                    padding: const EdgeInsets.all(0),   
+                    margin: const EdgeInsets.all(0),                   
+                    child: Image.network('https://m.media-amazon.com/images/I/81zDQ39P-jL.jpg'),
+                    
+                  ),
+                ],
+              ),
+              const Text("Login", style: TextStyle(fontSize: 32)),
               usernameFormField(),
               passwordFormField(),
               Container(
                 width: 170,
                 height: 50,
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
                   child: const Text("Logar"),
                   onPressed: (){
+                    
+           
                     Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const MyHomePage(title: "CineCriticas")));
+                    
+                    const snackBar = SnackBar(
+                      content: Text('Seja bem vindo de volta!!! :)', style: TextStyle(color: Colors.white),),
+                      backgroundColor: Colors.blueAccent,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                 ),
               ),
               Container(
                 width: 170,
                 height: 50,
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 child: ElevatedButton(
-                  child: const Text("Cadastrar"),
                   onPressed: (){
                     Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Cadastrar()));
                   },
+                       
+                  child: const Text("Cadastrar",),
                 ),
               ),
             ],

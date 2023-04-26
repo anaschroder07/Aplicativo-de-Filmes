@@ -11,26 +11,24 @@ class Cadastrar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       body: Container(
-        
-        //width: 300,
         alignment: Alignment.center,
         child: Form(
           child: Column(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.center,
+            
             children: [
               const Text("Cadastro", style: TextStyle(fontSize: 32),),
               usernameFormField(),
               emailFormField(),
-              sexoFormField(1),
+              const SexFormField(),
               passwordFormField(),
               passwordConfirmationFormField(),
               Container(
                 width: 170,
                 height: 50,
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
                   child: const Text("Cadastrar"),
                   onPressed: (){
@@ -90,43 +88,63 @@ Widget emailFormField() {
 
 String? genero;
 
-  Widget sexoFormField(int value){
+class SexFormField extends StatefulWidget {
+  const SexFormField({super.key});
+
+  @override
+  State<SexFormField> createState() => _SexFormFieldState();
+}
+
+class _SexFormFieldState extends State<SexFormField> {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        RadioListTile(
-      title: Text("Feminino"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: const [
+            Text("\nSexo",
+            style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 165, 162, 152)),
+            textAlign: TextAlign.right,
+            ),
+           ]
+          ),
+      RadioListTile(
+      title: const Text("Feminino"),
       value: "Feminino",
-      groupValue: genero, // Valor do grupo
+      groupValue: genero,
       onChanged: (value) {   
-          /*setState(() {
+          setState(() {
             genero = value.toString();
-          });*/
+          });
         
       },),
       RadioListTile(
-      title: Text("Masculino"),
+      title: const Text("Masculino"),
       value: "Masculino",
-      groupValue: genero, // Valor do grupo
+      groupValue: genero,
       onChanged: (value) {   
-          /*setState(() {
+          setState(() {
             genero = value.toString();
-          });*/
+          });
         
       },),
       RadioListTile(
-      title: Text("Outro"),
+      title: const Text("Outro"),
       value: "Outro",
-      groupValue: genero, // Valor do grupo
+      groupValue: genero, 
       onChanged: (value) {   
-          /*setState(() {
+          setState(() {
             genero = value.toString();
-          });*/
+          });
         
       },),
 
       ],
     );
-  } 
+  }
+}
+
 
   Widget passwordFormField() {
     return TextFormField(
