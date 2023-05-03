@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trabalho1/screens/avaliacoes.dart';
 import 'package:trabalho1/screens/avaliar.dart';
 import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
 import 'package:trabalho1/screens/login.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox("widgets_values");
   runApp(const MyApp());
 }
 
@@ -16,7 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(brightness: Brightness.dark, primaryColor: Colors.black,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.black,
       ),
       home: Login(title: 'Trabalho 0'),
     );
@@ -27,7 +33,6 @@ class Login extends StatefulWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Login({super.key, required this.title});
 
-
   final String title;
 
   @override
@@ -35,11 +40,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _widgetsValues = Hive.box("widgets_values");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
+      body: Container(
         alignment: Alignment.center,
         child: Form(
           child: Column(
@@ -47,15 +53,18 @@ class _LoginState extends State<Login> {
               Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.only(top: 5),
-                  padding: const EdgeInsets.all(0),   
-                
-                child: const Text("Descrição", style: TextStyle(fontSize: 32),),
+                padding: const EdgeInsets.all(0),
+                child: const Text(
+                  "Descrição",
+                  style: TextStyle(fontSize: 32),
+                ),
               ),
               Container(
                 alignment: Alignment.center,
-                 padding: const EdgeInsets.all(0),   
-                margin: const EdgeInsets.all(10),  
-                child: const Text("O projeto escolhido trata-se de uma plataforma para visualização e avaliação de filmes e séries que utiliza a API TMDB (The Movie Database) e armazena dados no banco de dados Firebase. O aplicativo permite ao usuário pesquisar por títulos de filmes e séries, visualizar informações sobre eles, como, por exemplo, descrição e elenco, além de permitir a avaliação dos títulos por meio de notas e comentários que serão armazenados em uma lista mantida no banco de dados."),
+                padding: const EdgeInsets.all(0),
+                margin: const EdgeInsets.all(10),
+                child: const Text(
+                    "O projeto escolhido trata-se de uma plataforma para visualização e avaliação de filmes e séries que utiliza a API TMDB (The Movie Database) e armazena dados no banco de dados Firebase. O aplicativo permite ao usuário pesquisar por títulos de filmes e séries, visualizar informações sobre eles, como, por exemplo, descrição e elenco, além de permitir a avaliação dos títulos por meio de notas e comentários que serão armazenados em uma lista mantida no banco de dados."),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -64,10 +73,10 @@ class _LoginState extends State<Login> {
                     alignment: Alignment.center,
                     width: 200,
                     height: 200,
-                    padding: const EdgeInsets.all(0),   
-                    margin: const EdgeInsets.all(0),                   
-                    child: Image.network('https://m.media-amazon.com/images/I/81zDQ39P-jL.jpg'),
-                    
+                    padding: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
+                    child: Image.network(
+                        'https://m.media-amazon.com/images/I/81zDQ39P-jL.jpg'),
                   ),
                 ],
               ),
@@ -80,14 +89,18 @@ class _LoginState extends State<Login> {
                 margin: const EdgeInsets.only(top: 20),
                 child: ElevatedButton(
                   child: const Text("Logar"),
-                  onPressed: (){
-                    
-           
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage(title: "CineCriticas")));
-                    
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const MyHomePage(title: "CineCriticas")));
+
                     const snackBar = SnackBar(
-                      content: Text('Seja bem vindo de volta!!! :)', style: TextStyle(color: Colors.white),),
+                      content: Text(
+                        'Seja bem vindo de volta!!! :)',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       backgroundColor: Colors.blueAccent,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -99,25 +112,25 @@ class _LoginState extends State<Login> {
                 height: 50,
                 margin: const EdgeInsets.all(10),
                 child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Cadastrar()));
+                        MaterialPageRoute(builder: (context) => Cadastrar()));
                   },
-                       
-                  child: const Text("Cadastrar",),
+                  child: const Text(
+                    "Cadastrar",
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
-      
     );
   }
-}
 
-Widget usernameFormField() {
+  Widget usernameFormField() {
     return TextFormField(
+      initialValue: _widgetsValues.get('user'),
       keyboardType: TextInputType.emailAddress,
       validator: (String? inValue) {
         if (inValue != null) {
@@ -127,16 +140,19 @@ Widget usernameFormField() {
         }
         return null;
       },
-      
       decoration: const InputDecoration(
         hintText: "user@domain.br",
         labelText: "Username (E-mail Address)",
       ),
+      onChanged: (value) {
+        _widgetsValues.put('user', value);
+      },
     );
   }
 
   Widget passwordFormField() {
     return TextFormField(
+      initialValue: _widgetsValues.get('pwd'),
       obscureText: true,
       validator: (String? inValue) {
         if (inValue != null) {
@@ -146,11 +162,12 @@ Widget usernameFormField() {
         }
         return null;
       },
-      
       decoration: const InputDecoration(
         labelText: "Insira uma senha forte",
       ),
+      onChanged: (value) {
+        _widgetsValues.put('pwd', value);
+      },
     );
   }
-
-
+}
