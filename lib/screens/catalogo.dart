@@ -32,7 +32,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) =>  Avaliar()));
               },
               child: Image.network(filmes[0]),
             ),
@@ -41,7 +41,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[1]),
             ),
@@ -50,7 +50,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[2]),
             ),
@@ -59,7 +59,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[3]),
             ),
@@ -68,7 +68,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) =>  Avaliar()));
               },
               child: Image.network(filmes[4]),
             ),
@@ -77,7 +77,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[5]),
             ),
@@ -86,7 +86,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) =>  Avaliar()));
               },
               child: Image.network(filmes[7]),
             ),
@@ -105,7 +105,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[7]),
             ),
@@ -114,7 +114,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[5]),
             ),
@@ -123,7 +123,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) =>  Avaliar()));
               },
               child: Image.network(filmes[4]),
             ),
@@ -132,7 +132,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) =>  Avaliar()));
               },
               child: Image.network(filmes[3]),
             ),
@@ -141,7 +141,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[2]),
             ),
@@ -150,7 +150,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[1]),
             ),
@@ -159,7 +159,7 @@ class Catalogo extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const Avaliar()));
+                        builder: (context) => Avaliar()));
               },
               child: Image.network(filmes[0]),
             ),
