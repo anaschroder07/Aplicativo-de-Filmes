@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trabalho1/screens/avaliacoes.dart';
 import 'package:trabalho1/screens/avaliar.dart';
@@ -6,10 +8,16 @@ import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
 import 'package:trabalho1/screens/login.dart';
 
+import 'screens/avaliar.dart';
+import 'bloc/reviews_bloc.dart';
+import 'data/local/local_database.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox("widgets_values");
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -18,20 +26,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.black,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ReviewsBloc>(
+          create: (_) => ReviewsBloc(ReviewDataProvider()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primaryColor: Colors.black,
+        ),
+        home: const Login(title: 'Trabalho 0'),
       ),
-      home: Login(title: 'Trabalho 0'),
     );
   }
 }
 
 class Login extends StatefulWidget {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Login({super.key, required this.title});
+  const Login({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -40,6 +54,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
   final _widgetsValues = Hive.box("widgets_values");
 
   @override
@@ -48,6 +63,7 @@ class _LoginState extends State<Login> {
       body: Container(
         alignment: Alignment.center,
         child: Form(
+          key: _formKey,
           child: Column(
             children: [
               Container(

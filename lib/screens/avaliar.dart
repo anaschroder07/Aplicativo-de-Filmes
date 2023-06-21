@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trabalho1/bloc/reviews_bloc.dart';
 import 'package:trabalho1/screens/assistidos.dart';
 import 'package:trabalho1/screens/catalogo.dart';
 
+import '../data/local/local_database.dart';
+
+final _widgetsValues = Hive.box("widgets_values");
+
 class Avaliar extends StatelessWidget {
-  const Avaliar({super.key});
+  final _formkey = GlobalKey<FormState>();
+
+  Avaliar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final reviewsBloc = BlocProvider.of<ReviewsBloc>(context);
+
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -42,6 +52,10 @@ class Avaliar extends StatelessWidget {
               ElevatedButton(
                 child: const Text("Enviar"),
                 onPressed: () {
+                  if (_formkey.currentState!.validate()) {
+                    reviewsBloc
+                        .add(InsertReviewsEvent(_widgetsValues.get('comment')));
+                  }
                   Navigator.pop(context);
                   const snackBar = SnackBar(
                     content: Text(
@@ -59,26 +73,33 @@ class Avaliar extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget avaliacao() {
-  return SizedBox(
-    width: 600,
-    child: TextFormField(
-      keyboardType: TextInputType.text,
-      validator: (String? inValue) {
-        if (inValue != null) {
-          if (inValue.isEmpty) {
-            return "Insira aqui sua avaliação";
-          }
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: "Avalie aqui",
+  Widget avaliacao() {
+    return SizedBox(
+      width: 600,
+      child: Form(
+        key: _formkey,
+        child: TextFormField(
+          keyboardType: TextInputType.text,
+          validator: (String? inValue) {
+            if (inValue != null) {
+              if (inValue.isEmpty) {
+                return "Insira aqui sua avaliação";
+              }
+            }
+            return null;
+          },
+          decoration: const InputDecoration(
+            labelText: "Avalie aqui",
+          ),
+          onSaved: (inValue) {},
+          onChanged: (inValue) {
+            _widgetsValues.put('comment', inValue);
+          },
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class Nota extends StatefulWidget {
@@ -90,7 +111,7 @@ class Nota extends StatefulWidget {
 
 class _NotaState extends State<Nota> {
   double _currentSliderValue = 0;
-  final _widgetsValues = Hive.box("widgets_values");
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
