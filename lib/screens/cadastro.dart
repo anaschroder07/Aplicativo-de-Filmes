@@ -3,9 +3,15 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../bloc/auth_bloc.dart';
 import '../main.dart';
+
+  String username = "";
+  String email = "";
+  String password = "";
 
 class Cadastrar extends StatelessWidget {
   Cadastrar({super.key});
@@ -14,10 +20,13 @@ class Cadastrar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formkey = GlobalKey();
+
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
         child: Form(
+          key: formkey,
           child: Column(
             children: [
               const Text(
@@ -36,12 +45,17 @@ class Cadastrar extends StatelessWidget {
                 child: ElevatedButton(
                   child: const Text("Cadastrar"),
                   onPressed: () {
-                    Navigator.push(
+                    if (formkey.currentState!.validate()) {
+                      formkey.currentState!.save();
+                      BlocProvider.of<AuthBloc>(context).add(RegisterUser(username: username, password: password));
+                    }
+                    
+                    /*Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Login(
                                   title: "Cadastro",
-                                )));
+                                )));*/
                   },
                 ),
               ),
@@ -53,6 +67,7 @@ class Cadastrar extends StatelessWidget {
   }
 
   Widget usernameFormField() {
+
     return TextFormField(
       initialValue: _widgetsValues.get('username'),
       keyboardType: TextInputType.name,
@@ -71,10 +86,14 @@ class Cadastrar extends StatelessWidget {
       onChanged: (value) {
         _widgetsValues.put('username', value);
       },
+      onSaved: (String? inValue) {
+        username = inValue!;
+      },
     );
   }
 
   Widget emailFormField() {
+
     return TextFormField(
       initialValue: _widgetsValues.get('email'),
       keyboardType: TextInputType.emailAddress,
@@ -93,10 +112,14 @@ class Cadastrar extends StatelessWidget {
       onChanged: (value) {
         _widgetsValues.put('email', value);
       },
+      onSaved: (String? inValue) {
+        email = inValue!;
+      },
     );
   }
 
   Widget passwordFormField() {
+
     return TextFormField(
       initialValue: _widgetsValues.get('password'),
       obscureText: true,
@@ -113,6 +136,9 @@ class Cadastrar extends StatelessWidget {
       ),
       onChanged: (value) {
         _widgetsValues.put('password', value);
+      },
+      onSaved: (String? inValue) {
+          password = inValue!;
       },
     );
   }
@@ -153,7 +179,7 @@ class _SexFormFieldState extends State<SexFormField> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Text(
             "\nSexo",
             style: TextStyle(

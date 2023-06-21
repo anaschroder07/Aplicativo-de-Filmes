@@ -86,15 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            title: const Text("Conta"),
-            onTap: (){
-              setState(() {
-                _currentScreen = 3;
-              });
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
             title: const Text("Logout"),
             onTap: (){
               Navigator.push(context,
