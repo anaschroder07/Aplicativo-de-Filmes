@@ -121,31 +121,18 @@ class _LoginState extends State<Login> {
                             builder: (context) =>
                                 const MyHomePage(title: "CineCriticas")));*/
 
-                    const snackBar = SnackBar(
+                    /*const snackBar = SnackBar(
                       content: Text(
                         'Seja bem vindo de volta!!! :)',
                         style: TextStyle(color: Colors.white),
                       ),
                       backgroundColor: Colors.blueAccent,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    );*/
+                    //ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                 ),
               ),
-              Container(
-                width: 170,
-                height: 50,
-                margin: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Cadastrar()));
-                  },
-                  child: const Text(
-                    "Cadastrar",
-                  ),
-                ),
-              ),
+              
             ],
           ),
         ),

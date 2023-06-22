@@ -83,14 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 _currentScreen = 2;
               });
               Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text("Logout"),
-            onTap: (){
-              Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  Login(title: "Login",)));
-            },
+         },
           ),
         ]),
       ),

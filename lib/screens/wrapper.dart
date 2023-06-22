@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trabalho1/screens/cadastro.dart';
+import 'package:trabalho1/screens/catalogo.dart';
+import 'package:trabalho1/screens/login.dart';
 
 //import '../bloc/manage_bloc.dart';
 //import '../bloc/monitor_bloc.dart';
@@ -16,13 +18,25 @@ class Wrapper extends StatefulWidget {
   State<StatefulWidget> createState() {
     return WrapperState();
   }
+
 }
 
 class WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
+    mostrar(){
+  const snackBar = SnackBar(
+                      content: Text(
+                        'Seja bem vindo de volta!!! :)',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.blueAccent,
+                    );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
+        
         if (state is AuthError) {
           showDialog(
               context: context,
@@ -54,16 +68,9 @@ Widget authenticatedWidget(BuildContext context) {
               BlocProvider.of<AuthBloc>(context).add(Logout());
             },
             child: const Icon(Icons.logout)),
-        appBar: AppBar(
-            title: const Text("widget.title"),
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions)),
-                Tab(icon: Icon(Icons.ac_unit))
-              ],
-            )),
-        body: const Text("Autenticado")),
-  );
+        
+        body: const MyHomePage(title: "CineCríticas"),
+  ));
 }
 
 Widget unauthenticatedWidget(BuildContext context) {
@@ -71,12 +78,12 @@ Widget unauthenticatedWidget(BuildContext context) {
       length: 2,
       child: Scaffold(
         body: TabBarView(
-          children: [Cadastrar(), Login(title: "Login",)],
+          children: [Login(title: "Login",),Cadastrar(),],
         ),
         appBar: AppBar(
-          title: const Text("Autenticação Necessária"),
+          title: const Text("CineCríticas"),
           bottom: const TabBar(
-            tabs: [Tab(text: "Novo Cadastro"), Tab(text: "Efetuar Login")],
+            tabs: [Tab(text: "Efetuar Login"),Tab(text: "Novo Cadastro")],
           ),
         ),
       ));
