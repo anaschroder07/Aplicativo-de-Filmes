@@ -32,7 +32,6 @@ class _MyHomePageState extends State<MyHomePage> {
           index: _currentScreen,
           children: const [
             Catalogo(),
-            Avaliacoes(),
             Assistidos(),
           ]
         ),
@@ -67,20 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.pop(context);
             },
           ),
-          ListTile(
-            title: const Text("Avaliações"),
-            onTap: (){
-              setState(() {
-                _currentScreen = 1;
-              });
-              Navigator.pop(context);
-            },
-          ),
+          
           ListTile(
             title: const Text("Assistidos"),
             onTap: (){
               setState(() {
-                _currentScreen = 2;
+                _currentScreen = 1;
               });
               Navigator.pop(context);
          },
