@@ -1,15 +1,15 @@
-import 'dart:ffi';
+
 
 class Note {
   String review = "";
-  double rating = 0.0;
+  String rating = "";
 
   Note() {
     review = "";
-    rating = 0.0;
+    rating = "";
   }
 
-  Note.withData({this.review = "", this.rating = 0.0});
+  Note.withData({this.review = "", this.rating = ""});
 
   Note.fromMap(map) {
     review = map["review"];
