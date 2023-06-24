@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "363196064267",
+    "project_id": "aplicativo-de-filmes-1e72a",
+    "storage_bucket": "aplicativo-de-filmes-1e72a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363196064267:android:7c370db8fc274682741d0e",
+        "android_client_info": {
+          "package_name": "com.euamomeunamorado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363196064267-2uacvv68jelh1ce7430n45rugabrn7r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgxkQQRPRdaD0cR4iOph2wRfO15emImqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363196064267-2uacvv68jelh1ce7430n45rugabrn7r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363196064267:android:13e6f571364b5245741d0e",
+        "android_client_info": {
+          "package_name": "com.example.trabalho1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363196064267-2uacvv68jelh1ce7430n45rugabrn7r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgxkQQRPRdaD0cR4iOph2wRfO15emImqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363196064267-2uacvv68jelh1ce7430n45rugabrn7r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -48,73 +48,75 @@ class _AvaliarState extends State<Avaliar> {
             onPressed: () => Navigator.pop(context),
           ),
         ),
-        body: Container(
-          alignment: Alignment.center,
-          child: Form(
-            key: formkey,
-            child: Column(
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      widget.movie.title,
-                      style: TextStyle(fontSize: 32),
-                    )),
-                Container(
-                  alignment: Alignment.center,
-                  width: 300,
-                  height: 300,
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(0),
-                  child: Image.network(widget.movie.imageUrl),
-                ),
-                SizedBox(
-                    width: 600,
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(widget.movie.description))),
-                avaliacao(),
-                const Nota(),
-                ElevatedButton(
-                    //child: const Text("Enviar"),
-                    onPressed: () {
-                  if (formkey.currentState!.validate()) {
-                    formkey.currentState!.save();
-                    String review = _widgetsValues.get('review') == null
-                        ? "Sem avaliação"
-                        : _widgetsValues.get('review').toString();
-                    String rating = _widgetsValues.get('rating') == null
-                        ? "Sem avaliação"
-                        : _widgetsValues.get('rating').toString();
+        body: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child: Form(
+              key: formkey,
+              child: Column(
+                children: [
+                  Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        widget.movie.title,
+                        style: TextStyle(fontSize: 32),
+                      )),
+                  Container(
+                    alignment: Alignment.center,
+                    width: 300,
+                    height: 300,
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(0),
+                    child: Image.network(widget.movie.imageUrl),
+                  ),
+                  SizedBox(
+                      width: 600,
+                      child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(widget.movie.description))),
+                  avaliacao(),
+                  const Nota(),
+                  ElevatedButton(
+                      //child: const Text("Enviar"),
+                      onPressed: () {
+                    if (formkey.currentState!.validate()) {
+                      formkey.currentState!.save();
+                      String review = _widgetsValues.get('review') == null
+                          ? "Sem avaliação"
+                          : _widgetsValues.get('review').toString();
+                      String rating = _widgetsValues.get('rating') == null
+                          ? "Sem avaliação"
+                          : _widgetsValues.get('rating').toString();
 
-                    Note note = Note.withData(review: review, rating: rating);
-                    BlocProvider.of<ManageBloc>(context).add(SubmitEvent(
-                      note: note,
-                    ));
-                    reviewController.text = "";
-                    ratingController.text = "";
-                  }
+                      Note note = Note.withData(review: review, rating: rating);
+                      BlocProvider.of<ManageBloc>(context).add(SubmitEvent(
+                        note: note,
+                      ));
+                      reviewController.text = "";
+                      ratingController.text = "";
+                    }
 
-                  Navigator.pop(context);
+                    Navigator.pop(context);
 
-                  const snackBar = SnackBar(
-                    content: Text(
-                      'Sua avaliação foi salva com sucesso! :)',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.blueAccent,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }, child: BlocBuilder<ManageBloc, ManageState>(
-                  builder: (context, state) {
-                    return (state is UpdateState
-                        ? const Text("Update")
-                        : const Text(
-                            "Insert",
-                          ));
-                  },
-                )),
-              ],
+                    const snackBar = SnackBar(
+                      content: Text(
+                        'Sua avaliação foi salva com sucesso! :)',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.blueAccent,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }, child: BlocBuilder<ManageBloc, ManageState>(
+                    builder: (context, state) {
+                      return (state is UpdateState
+                          ? const Text("Update")
+                          : const Text(
+                              "Insert",
+                            ));
+                    },
+                  )),
+                ],
+              ),
             ),
           ),
         ),

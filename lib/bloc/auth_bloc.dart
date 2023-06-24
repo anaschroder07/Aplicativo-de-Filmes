@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../provider/firebase_auth.dart';
@@ -37,7 +35,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         await _authenticationService.signInWithEmailAndPassword(
             event.username, event.password);
-
       } catch (e) {
         emit(AuthError(
             message:

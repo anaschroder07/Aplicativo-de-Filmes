@@ -50,6 +50,7 @@ dependencies:
   socket_io_client: ^2.0.2
   cloud_firestore: ^4.8.0
   firebase_storage: ^11.2.3
+  image_picker: ^0.8.9
 
 
 dev_dependencies:

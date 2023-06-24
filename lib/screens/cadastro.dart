@@ -1,66 +1,125 @@
-import 'dart:html';
-
+//import 'dart:html';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-//import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
 
 import '../bloc/auth_bloc.dart';
-//import '../main.dart';
+import '../main.dart';
 
 String username = "";
 String email = "";
 String password = "";
 
-class Cadastrar extends StatelessWidget {
+class Cadastrar extends StatefulWidget {
   Cadastrar({super.key});
 
+  @override
+  State<Cadastrar> createState() => _CadastrarState();
+}
+
+class _CadastrarState extends State<Cadastrar> {
   final _widgetsValues = Hive.box("widgets_values");
+
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+
+  File? _imageFile;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await picker.getImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) {
+        _imageFile = File(pickedFile.path);
+      }
+    });
+  }
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) {
+      return;
+    }
+
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('images/$fileName');
+
+    await ref.putFile(_imageFile!);
+
+    String imageUrl = await ref.getDownloadURL();
+
+    setState(() {
+      _imageFile = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formkey = GlobalKey();
 
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: Form(
-          key: formkey,
-          child: Column(
-            children: [
-              const Text(
-                "Cadastro",
-                style: TextStyle(fontSize: 32),
-              ),
-              usernameFormField(),
-              emailFormField(),
-              const SexFormField(),
-              passwordFormField(),
-              passwordConfirmationFormField(),
-              Container(
-                width: 170,
-                height: 50,
-                margin: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  child: const Text("Cadastrar"),
-                  onPressed: () {
-                    if (formkey.currentState!.validate()) {
-                      formkey.currentState!.save();
-                      BlocProvider.of<AuthBloc>(context).add(
-                          RegisterUser(username: username, password: password));
-                    }
-
-                    /*Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Login(
-                                  title: "Cadastro",
-                                )));*/
-                  },
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          child: Form(
+            key: formkey,
+            child: Column(
+              children: [
+                const Text(
+                  "Cadastro",
+                  style: TextStyle(fontSize: 32),
                 ),
-              ),
-            ],
+                usernameFormField(),
+                emailFormField(),
+                const SexFormField(),
+                passwordFormField(),
+                passwordConfirmationFormField(),
+                _imageFile != null
+                    ? Image.file(_imageFile!)
+                    : Text('Nenhuma imagem selecionada'),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () => _pickImage(ImageSource.camera),
+                  child: Text('Tirar Foto'),
+                ),
+                ElevatedButton(
+                  onPressed: () => _pickImage(ImageSource.gallery),
+                  child: Text('Selecionar da Galeria'),
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  width: 170,
+                  height: 50,
+                  margin: const EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                    child: const Text("Cadastrar"),
+                    onPressed: () {
+                      if (formkey.currentState!.validate()) {
+                        formkey.currentState!.save();
+                        BlocProvider.of<AuthBloc>(context).add(RegisterUser(
+                            username: username, password: password));
+                        _uploadImage();
+                      }
+
+                      /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Login(
+                                    title: "Cadastro",
+                                  )));*/
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
