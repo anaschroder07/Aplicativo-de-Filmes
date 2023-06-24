@@ -1,11 +1,10 @@
-
 //import 'package:asdf/provider/local_database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../model/note.dart';
 import '../provider/firestore_firebase.dart';
 //import '../provider/realtime_firebase.dart';
-import '../provider/rest_provider.dart';
+//import '../provider/rest_provider.dart';
 
 class ManageBloc extends Bloc<ManageEvent, ManageState> {
   ManageBloc() : super(InsertState()) {

@@ -5,11 +5,11 @@ import 'package:trabalho1/screens/wrapper.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/manage_db_bloc.dart';
 import 'bloc/monitor_db_bloc.dart';
-import 'screens/avaliacoes.dart';
-import 'screens/avaliar.dart';
-import 'screens/cadastro.dart';
-import 'screens/catalogo.dart';
-import 'screens/login.dart';
+//import 'screens/avaliacoes.dart';
+//import 'screens/avaliar.dart';
+//import 'screens/cadastro.dart';
+//import 'screens/catalogo.dart';
+//import 'screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {

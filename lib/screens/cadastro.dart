@@ -2,16 +2,16 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+//import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../bloc/auth_bloc.dart';
-import '../main.dart';
+//import '../main.dart';
 
-  String username = "";
-  String email = "";
-  String password = "";
+String username = "";
+String email = "";
+String password = "";
 
 class Cadastrar extends StatelessWidget {
   Cadastrar({super.key});
@@ -47,9 +47,10 @@ class Cadastrar extends StatelessWidget {
                   onPressed: () {
                     if (formkey.currentState!.validate()) {
                       formkey.currentState!.save();
-                      BlocProvider.of<AuthBloc>(context).add(RegisterUser(username: username, password: password));
+                      BlocProvider.of<AuthBloc>(context).add(
+                          RegisterUser(username: username, password: password));
                     }
-                    
+
                     /*Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -67,7 +68,6 @@ class Cadastrar extends StatelessWidget {
   }
 
   Widget usernameFormField() {
-
     return TextFormField(
       initialValue: _widgetsValues.get('username'),
       keyboardType: TextInputType.name,
@@ -93,7 +93,6 @@ class Cadastrar extends StatelessWidget {
   }
 
   Widget emailFormField() {
-
     return TextFormField(
       initialValue: _widgetsValues.get('email'),
       keyboardType: TextInputType.emailAddress,
@@ -119,7 +118,6 @@ class Cadastrar extends StatelessWidget {
   }
 
   Widget passwordFormField() {
-
     return TextFormField(
       initialValue: _widgetsValues.get('password'),
       obscureText: true,
@@ -138,7 +136,7 @@ class Cadastrar extends StatelessWidget {
         _widgetsValues.put('password', value);
       },
       onSaved: (String? inValue) {
-          password = inValue!;
+        password = inValue!;
       },
     );
   }

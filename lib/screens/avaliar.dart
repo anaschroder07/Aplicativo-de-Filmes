@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+//import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trabalho1/screens/assistidos.dart';
-import 'package:trabalho1/screens/catalogo.dart';
+//import 'package:trabalho1/screens/assistidos.dart';
+//import 'package:trabalho1/screens/catalogo.dart';
 
 import '../bloc/manage_db_bloc.dart';
 import '../model/note.dart';
+import 'catalogo.dart';
 
 final _widgetsValues = Hive.box("widgets_values");
 
 class Avaliar extends StatefulWidget {
-  const Avaliar({super.key});
+  final Movie movie;
+  const Avaliar({super.key, required this.movie});
 
   @override
   State<Avaliar> createState() => _AvaliarState();
@@ -41,6 +42,12 @@ class _AvaliarState extends State<Avaliar> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
         body: Container(
           alignment: Alignment.center,
           child: Form(
@@ -49,8 +56,8 @@ class _AvaliarState extends State<Avaliar> {
               children: [
                 Container(
                     padding: const EdgeInsets.only(top: 10),
-                    child: const Text(
-                      "Jonh Wick - Baba Yaga",
+                    child: Text(
+                      widget.movie.title,
                       style: TextStyle(fontSize: 32),
                     )),
                 Container(
@@ -59,15 +66,13 @@ class _AvaliarState extends State<Avaliar> {
                   height: 300,
                   padding: const EdgeInsets.all(10),
                   margin: const EdgeInsets.all(0),
-                  child: Image.network(
-                      'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvfkYNcjh7mncO6XPUlv611d5yqHUkGZMjGq8PXmKzGqeyC23A'),
+                  child: Image.network(widget.movie.imageUrl),
                 ),
                 SizedBox(
                     width: 600,
                     child: Container(
                         padding: const EdgeInsets.all(10),
-                        child: const Text(
-                            "Com o preço por sua cabeça cada vez maior, o lendário assassino de aluguel John Wick leva sua luta contra o High Table global enquanto procura os jogadores mais poderosos do submundo, de Nova York a Paris, do Japão a Berlim."))),
+                        child: Text(widget.movie.description))),
                 avaliacao(),
                 const Nota(),
                 ElevatedButton(

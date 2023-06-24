@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trabalho1/screens/assistidos.dart';
 import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
-import 'package:trabalho1/screens/login.dart';
+//import 'package:trabalho1/screens/login.dart';
 
 //import '../bloc/manage_bloc.dart';
 //import '../bloc/monitor_bloc.dart';
 //import 'add_note.dart';
 //import 'list_note.dart';
 import '../bloc/manage_db_bloc.dart';
-import '../bloc/monitor_db_bloc.dart';
+//import '../bloc/monitor_db_bloc.dart';
 import '../main.dart';
 import '../bloc/auth_bloc.dart';
 
@@ -122,11 +122,14 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: IndexedStack(
-            index: _currentScreen, children: const [Catalogo(), Assistidos()]),
+            index: _currentScreen, children: [Catalogo(), const Assistidos()]),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Tela 1"),
-            BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Tela 2")
+            BottomNavigationBarItem(
+                icon: Icon(Icons.local_movies), label: "Catálogo de Filmes"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.remove_red_eye_outlined),
+                label: "Filmes Assistidos")
           ],
           currentIndex: _currentScreen,
           onTap: (value) {
