@@ -1,51 +1,62 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trabalho1/screens/avaliacoes.dart';
-import 'package:trabalho1/screens/avaliar.dart';
-import 'package:trabalho1/screens/cadastro.dart';
-import 'package:trabalho1/screens/catalogo.dart';
-import 'package:trabalho1/screens/login.dart';
-
+import 'package:trabalho1/screens/wrapper.dart';
+import 'bloc/auth_bloc.dart';
+import 'bloc/manage_db_bloc.dart';
+import 'bloc/monitor_db_bloc.dart';
+import 'screens/avaliacoes.dart';
 import 'screens/avaliar.dart';
-import 'bloc/reviews_bloc.dart';
-import 'data/local/local_database.dart';
+import 'screens/cadastro.dart';
+import 'screens/catalogo.dart';
+import 'screens/login.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyAf9Ym-XcGNs2fOKELFh87T5jwJlj9mA8g",
+          appId: "1:363196064267:web:59f62da0fef12543741d0e",
+          messagingSenderId: "363196064267",
+          projectId: "aplicativo-de-filmes-1e72a",
+          authDomain: "aplicativo-de-filmes-1e72a.firebaseapp.com",
+          storageBucket: "aplicativo-de-filmes-1e72a.appspot.com"));
   await Hive.initFlutter();
   await Hive.openBox("widgets_values");
-  await Firebase.initializeApp();
-
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => ManageBloc()),
+    BlocProvider(create: (_) => MonitorBloc()),
+  ], child: const MyApp()));
 }
+
+String username = "";
+String password = "";
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ReviewsBloc>(
-          create: (_) => ReviewsBloc(ReviewDataProvider()),
-        ),
-      ],
-      child: MaterialApp(
+    return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.black,
         ),
-        home: const Login(title: 'Trabalho 0'),
-      ),
-    );
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => AuthBloc()),
+          ],
+          child: const Wrapper(),
+        )
+        //Login(title: 'Trabalho 0'),
+        );
   }
 }
 
 class Login extends StatefulWidget {
-  const Login({Key? key, required this.title}) : super(key: key);
+  Login({super.key, required this.title});
 
   final String title;
 
@@ -54,7 +65,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final _widgetsValues = Hive.box("widgets_values");
 
   @override
@@ -63,7 +74,7 @@ class _LoginState extends State<Login> {
       body: Container(
         alignment: Alignment.center,
         child: Form(
-          key: _formKey,
+          key: formkey,
           child: Column(
             children: [
               Container(
@@ -106,35 +117,26 @@ class _LoginState extends State<Login> {
                 child: ElevatedButton(
                   child: const Text("Logar"),
                   onPressed: () {
-                    Navigator.push(
+                    if (formkey.currentState!.validate()) {
+                      formkey.currentState!.save();
+                      BlocProvider.of<AuthBloc>(context).add(
+                          LoginUser(username: username, password: password));
+                    }
+                    /*Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const MyHomePage(title: "CineCriticas")));
+                                const MyHomePage(title: "CineCriticas")));*/
 
-                    const snackBar = SnackBar(
+                    /*const snackBar = SnackBar(
                       content: Text(
                         'Seja bem vindo de volta!!! :)',
                         style: TextStyle(color: Colors.white),
                       ),
                       backgroundColor: Colors.blueAccent,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    );*/
+                    //ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
-                ),
-              ),
-              Container(
-                width: 170,
-                height: 50,
-                margin: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Cadastrar()));
-                  },
-                  child: const Text(
-                    "Cadastrar",
-                  ),
                 ),
               ),
             ],
@@ -163,6 +165,9 @@ class _LoginState extends State<Login> {
       onChanged: (value) {
         _widgetsValues.put('user', value);
       },
+      onSaved: (String? inValue) {
+        username = inValue!;
+      },
     );
   }
 
@@ -183,6 +188,9 @@ class _LoginState extends State<Login> {
       ),
       onChanged: (value) {
         _widgetsValues.put('pwd', value);
+      },
+      onSaved: (String? inValue) {
+        password = inValue!;
       },
     );
   }
