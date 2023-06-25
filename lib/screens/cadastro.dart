@@ -1,8 +1,5 @@
-//import 'dart:html';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,15 +9,18 @@ import 'package:image_picker/image_picker.dart';
 import '../bloc/auth_bloc.dart';
 import '../main.dart';
 
+String filePNG = "";
 String username = "";
 String email = "";
 String password = "";
+String userImageUrl =
+    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fmundoeducacao.uol.com.br%2Fbiologia%2Fcapivara.htm&psig=AOvVaw1PTM1C4yg72qDozJSeJsxN&ust=1687733841701000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCLCNveiA3f8CFQAAAAAdAAAAABAD"; // Variável para armazenar a URL da imagem cadastrada
 
 class Cadastrar extends StatefulWidget {
-  Cadastrar({super.key});
+  Cadastrar({Key? key}) : super(key: key);
 
   @override
-  State<Cadastrar> createState() => _CadastrarState();
+  _CadastrarState createState() => _CadastrarState();
 }
 
 class _CadastrarState extends State<Cadastrar> {
@@ -47,14 +47,16 @@ class _CadastrarState extends State<Cadastrar> {
       return;
     }
 
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = username.toString();
+    filePNG = fileName;
     firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('images/$fileName');
 
     await ref.putFile(_imageFile!);
 
-    String imageUrl = await ref.getDownloadURL();
+    userImageUrl = await ref.getDownloadURL();
+    //_widgetsValues.put("userImageUrl", userImageUrl.toString());
 
     setState(() {
       _imageFile = null;
@@ -105,16 +107,11 @@ class _CadastrarState extends State<Cadastrar> {
                       if (formkey.currentState!.validate()) {
                         formkey.currentState!.save();
                         BlocProvider.of<AuthBloc>(context).add(RegisterUser(
-                            username: username, password: password));
+                          username: username,
+                          password: password,
+                        ));
                         _uploadImage();
                       }
-
-                      /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login(
-                                    title: "Cadastro",
-                                  )));*/
                     },
                   ),
                 ),
@@ -225,7 +222,7 @@ class _CadastrarState extends State<Cadastrar> {
 String? genero;
 
 class SexFormField extends StatefulWidget {
-  const SexFormField({super.key});
+  const SexFormField({Key? key}) : super(key: key);
 
   @override
   State<SexFormField> createState() => _SexFormFieldState();

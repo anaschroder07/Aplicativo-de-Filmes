@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: IndexedStack(
-            index: _currentScreen, children: [Catalogo(), const Assistidos()]),
+            index: _currentScreen, children: [Catalogo(), Assistidos()]),
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(

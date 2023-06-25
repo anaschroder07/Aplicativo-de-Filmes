@@ -214,17 +214,61 @@ class Assistidos extends StatelessWidget {
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:trabalho1/screens/cadastro.dart';
 
 import '../bloc/manage_db_bloc.dart';
 import '../bloc/monitor_db_bloc.dart';
 import '../model/note_collection.dart';
+import 'cadastro.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+
+Future<String> getImageUrl(fileName) async {
+  firebase_storage.Reference imageRef =
+      firebase_storage.FirebaseStorage.instance.ref().child('images/$fileName');
+
+  try {
+    String downloadUrl = await imageRef.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    throw Exception('A imagem não foi encontrada.');
+  }
+}
 
 class Assistidos extends StatelessWidget {
-  const Assistidos({super.key});
+  Assistidos({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
+    return SingleChildScrollView(
+      child: FutureBuilder<String>(
+        future: getImageUrl(filePNG),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Text(filePNG),
+                Text(snapshot.data!),
+                ClipRRect(child: Image.network(userImageUrl)),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return Text('Erro ao carregar a imagem: ${snapshot.error}');
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      ),
+    );
+  }
+}
+ /*BlocBuilder<MonitorBloc, MonitorState>(builder: (context, state) {
       NoteCollection noteCollection = state.noteCollection;
       return ListView.builder(
         itemCount: noteCollection.length(),
@@ -260,6 +304,4 @@ class Assistidos extends StatelessWidget {
           );
         },
       );
-    });
-  }
-}
+    });*/
