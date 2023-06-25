@@ -25,9 +25,20 @@ class _AvaliarState extends State<Avaliar> {
   final GlobalKey<FormState> formkey = GlobalKey();
 
   final reviewController = TextEditingController();
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trabalho1/logic/manage_local_db_event.dart';
+import 'package:trabalho1/logic/monitor_local_db_bloc.dart';
+import 'package:trabalho1/logic/monitor_local_db_event.dart';
+import 'package:trabalho1/model/review.dart';
+import 'package:trabalho1/screens/assistidos.dart';
+import 'package:trabalho1/screens/catalogo.dart';
 
-  @override
-  Widget build(BuildContext context) {
+import '../logic/manage_local_db_bloc.dart';
+
+final Review review = new Review();
     ManageBloc blocInstance = BlocProvider.of<ManageBloc>(context);
     return BlocListener<ManageBloc, ManageState>(
       bloc: blocInstance,
@@ -97,7 +108,6 @@ class _AvaliarState extends State<Avaliar> {
                     }
 
                     Navigator.pop(context);
-
                     const snackBar = SnackBar(
                       content: Text(
                         'Sua avaliação foi salva com sucesso! :)',
@@ -155,7 +165,6 @@ class Nota extends StatefulWidget {
 
 class _NotaState extends State<Nota> {
   double _currentSliderValue = 0.0;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -176,6 +185,7 @@ class _NotaState extends State<Nota> {
                   ? "Sem avaliação"
                   : _widgetsValues.get('rating').toString();
             });
+            review.stars = value;
           }),
     );
   }
