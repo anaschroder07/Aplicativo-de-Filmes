@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trabalho1/screens/assistidos.dart';
+import 'package:trabalho1/screens/cadastro.dart';
 
 import '../provider/firebase_auth.dart';
 import '../model/user_model.dart';

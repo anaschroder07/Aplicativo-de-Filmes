@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trabalho1/screens/assistidos.dart';
+import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/wrapper.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/manage_db_bloc.dart';
@@ -127,11 +129,13 @@ class _LoginState extends State<Login> {
                   margin: const EdgeInsets.only(top: 20),
                   child: ElevatedButton(
                     child: const Text("Logar"),
-                    onPressed: () {
+                    onPressed: () async {
                       if (formkey.currentState!.validate()) {
                         formkey.currentState!.save();
                         BlocProvider.of<AuthBloc>(context).add(
                             LoginUser(username: username, password: password));
+                        userImageUrl = await getImageUrl(username);
+                        filePNG = username;
                       }
                       /*Navigator.push(
                           context,

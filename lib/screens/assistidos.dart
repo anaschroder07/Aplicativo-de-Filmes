@@ -247,23 +247,11 @@ class Assistidos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: FutureBuilder<String>(
-        future: getImageUrl(filePNG),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                Text(filePNG),
-                Text(snapshot.data!),
-                ClipRRect(child: Image.network(userImageUrl)),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Text('Erro ao carregar a imagem: ${snapshot.error}');
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
+      child: Column(
+        children: [
+          Text(filePNG),
+          ClipRRect(child: Image.network(userImageUrl)),
+        ],
       ),
     );
   }
