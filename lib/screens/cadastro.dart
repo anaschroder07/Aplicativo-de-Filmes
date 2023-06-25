@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../bloc/auth_bloc.dart';
 import '../main.dart';
 
+String caminho = "";
 String filePNG = "";
 String username = "";
 String email = "";
@@ -54,6 +55,7 @@ class _CadastrarState extends State<Cadastrar> {
         .child('images/$fileName');
 
     await ref.putFile(_imageFile!);
+    caminho = ref.fullPath;
 
     userImageUrl = await ref.getDownloadURL();
     //_widgetsValues.put("userImageUrl", userImageUrl.toString());

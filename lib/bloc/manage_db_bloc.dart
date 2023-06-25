@@ -34,7 +34,7 @@ class ManageBloc extends Bloc<ManageEvent, ManageState> {
     if (state is InsertState) {
       //RestDataProvider.helper.insertNote(event.note);
       //RealtimeDatabaseProvider.helper.insertNote(event.note);
-      FirestoreDatabase.helper.insertNote(event.note);
+      FirestoreDatabase.helper.insertNote(event.note, event.filmeId);
     } else if (state is UpdateState) {
       //RestDataProvider.helper.updateNote(
       //RealtimeDatabaseProvider.helper.updateNote(
@@ -52,7 +52,8 @@ abstract class ManageEvent {}
 
 class SubmitEvent extends ManageEvent {
   Note note;
-  SubmitEvent({required this.note});
+  String filmeId;
+  SubmitEvent({required this.note, required this.filmeId});
 }
 
 class DeleteEvent extends ManageEvent {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:trabalho1/screens/assistidos.dart';
 import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
@@ -13,6 +14,16 @@ import '../bloc/manage_db_bloc.dart';
 //import '../bloc/monitor_db_bloc.dart';
 import '../main.dart';
 import '../bloc/auth_bloc.dart';
+import '../screens/cadastro.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+firebase_storage.Reference ref =
+    firebase_storage.FirebaseStorage.instance.ref().child("images");
+
+void removerImagem(String uid, String username) {
+  ref.child(username).delete();
+  print(username);
+}
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -62,7 +73,8 @@ class WrapperState extends State<Wrapper> {
 }
 
 Widget authenticatedWidget(BuildContext context) {
-  return DefaultTabController(
+  return Stack(children: [
+    DefaultTabController(
       length: 2,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -71,7 +83,9 @@ Widget authenticatedWidget(BuildContext context) {
             },
             child: const Icon(Icons.logout)),
         body: const MyHomePage(title: "CineCríticas"),
-      ));
+      ),
+    ),
+  ]);
 }
 
 Widget unauthenticatedWidget(BuildContext context) {
@@ -117,28 +131,70 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
+      child: Stack(children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: IndexedStack(
+              index: _currentScreen, children: [Catalogo(), Assistidos()]),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.local_movies), label: "Catálogo de Filmes"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.remove_red_eye_outlined),
+                  label: "Filmes Assistidos")
+            ],
+            currentIndex: _currentScreen,
+            onTap: (value) {
+              setState(() {
+                _currentScreen = value;
+              });
+            },
+          ),
         ),
-        body: IndexedStack(
-            index: _currentScreen, children: [Catalogo(), Assistidos()]),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.local_movies), label: "Catálogo de Filmes"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.remove_red_eye_outlined),
-                label: "Filmes Assistidos")
-          ],
-          currentIndex: _currentScreen,
-          onTap: (value) {
-            setState(() {
-              _currentScreen = value;
-            });
-          },
+        Positioned(
+          top: 26, // Ajuste a posição vertical conforme necessário
+          right: 16, // Ajuste a posição horizontal conforme necessário
+          child: Row(
+            children: [
+              Container(
+                  width: 50, // Ajuste o tamanho da imagem conforme necessário
+                  height: 50,
+                  child: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      removerImagem(filePNG,
+                          filePNG); // Chama o método para remover a imagem
+                    },
+                  )),
+              Container(
+                width: 50, // Ajuste o tamanho da imagem conforme necessário
+                height: 50, // Ajuste o tamanho da imagem conforme necessário
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.8),
+                      blurRadius: 4,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      100), // Raio da borda (metade da largura ou altura)
+                  child: Image.network(
+                    userImageUrl,
+                    fit: BoxFit.cover, // Ajuste da imagem dentro do container
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ]),
     );
   }
 }

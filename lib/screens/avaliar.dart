@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-//import 'package:trabalho1/screens/assistidos.dart';
-//import 'package:trabalho1/screens/catalogo.dart';
 
 import '../bloc/manage_db_bloc.dart';
 import '../model/note.dart';
@@ -13,7 +10,7 @@ final _widgetsValues = Hive.box("widgets_values");
 
 class Avaliar extends StatefulWidget {
   final Movie movie;
-  const Avaliar({super.key, required this.movie});
+  const Avaliar({required this.movie});
 
   @override
   State<Avaliar> createState() => _AvaliarState();
@@ -56,11 +53,12 @@ class _AvaliarState extends State<Avaliar> {
               child: Column(
                 children: [
                   Container(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        widget.movie.title,
-                        style: TextStyle(fontSize: 32),
-                      )),
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      widget.movie.title,
+                      style: TextStyle(fontSize: 32),
+                    ),
+                  ),
                   Container(
                     alignment: Alignment.center,
                     width: 300,
@@ -70,51 +68,52 @@ class _AvaliarState extends State<Avaliar> {
                     child: Image.network(widget.movie.imageUrl),
                   ),
                   SizedBox(
-                      width: 600,
-                      child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(widget.movie.description))),
+                    width: 600,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(widget.movie.description),
+                    ),
+                  ),
                   avaliacao(),
                   const Nota(),
                   ElevatedButton(
-                      //child: const Text("Enviar"),
-                      onPressed: () {
-                    if (formkey.currentState!.validate()) {
-                      formkey.currentState!.save();
-                      String review = _widgetsValues.get('review') == null
-                          ? "Sem avaliação"
-                          : _widgetsValues.get('review').toString();
-                      String rating = _widgetsValues.get('rating') == null
-                          ? "Sem avaliação"
-                          : _widgetsValues.get('rating').toString();
+                    onPressed: () {
+                      if (formkey.currentState!.validate()) {
+                        formkey.currentState!.save();
+                        String review = _widgetsValues.get('textFormField') ==
+                                null
+                            ? "Sem avaliação"
+                            : _widgetsValues.get('textFormField').toString();
+                        String rating = _widgetsValues.get('slider') == null
+                            ? "Sem avaliação"
+                            : _widgetsValues.get('slider').toString();
+                        reviewController.text = review;
+                        ratingController.text = rating;
+                        Note note =
+                            Note.withData(review: review, rating: rating);
+                        BlocProvider.of<ManageBloc>(context)
+                            .add(SubmitEvent(note: note, filmeId: "jonas"));
+                      }
 
-                      Note note = Note.withData(review: review, rating: rating);
-                      BlocProvider.of<ManageBloc>(context).add(SubmitEvent(
-                        note: note,
-                      ));
-                      reviewController.text = "";
-                      ratingController.text = "";
-                    }
+                      Navigator.pop(context);
 
-                    Navigator.pop(context);
-
-                    const snackBar = SnackBar(
-                      content: Text(
-                        'Sua avaliação foi salva com sucesso! :)',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.blueAccent,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }, child: BlocBuilder<ManageBloc, ManageState>(
-                    builder: (context, state) {
-                      return (state is UpdateState
-                          ? const Text("Update")
-                          : const Text(
-                              "Insert",
-                            ));
+                      const snackBar = SnackBar(
+                        content: Text(
+                          'Sua avaliação foi salva com sucesso! :)',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.blueAccent,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     },
-                  )),
+                    child: BlocBuilder<ManageBloc, ManageState>(
+                      builder: (context, state) {
+                        return (state is UpdateState
+                            ? const Text("Update")
+                            : const Text("Insert"));
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -141,13 +140,15 @@ class _AvaliarState extends State<Avaliar> {
         decoration: const InputDecoration(
           labelText: "Avalie aqui",
         ),
+        onSaved: (String? inValue) =>
+            _widgetsValues.put("textFormField", inValue),
       ),
     );
   }
 }
 
 class Nota extends StatefulWidget {
-  const Nota({super.key});
+  const Nota({Key? key});
 
   @override
   State<Nota> createState() => _NotaState();
@@ -161,22 +162,19 @@ class _NotaState extends State<Nota> {
     return SizedBox(
       width: 600,
       child: Slider(
-          //controller: ratingController,
-          value: (_widgetsValues.get('slider') == null
-              ? _currentSliderValue
-              : _widgetsValues.get('slider')),
-          max: 5,
-          divisions: 10,
-          label: "jonas", //(_widgetsValues.get('slider') ?? 0.0).toString(),
-          onChanged: (double value) {
-            setState(() {
-              _widgetsValues.put('slider', value);
-              _currentSliderValue = value;
-              ratingController.text = _widgetsValues.get('rating') == null
-                  ? "Sem avaliação"
-                  : _widgetsValues.get('rating').toString();
-            });
-          }),
+        value: (_widgetsValues.get('slider') == null
+            ? _currentSliderValue
+            : _widgetsValues.get('slider')),
+        max: 5,
+        divisions: 10,
+        label: _widgetsValues.get('slider').toString(),
+        onChanged: (double value) {
+          setState(() {
+            _widgetsValues.put('slider', value);
+            _currentSliderValue = value;
+          });
+        },
+      ),
     );
   }
 }

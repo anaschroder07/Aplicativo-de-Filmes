@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:trabalho1/screens/assistidos.dart';
 import 'dart:convert';
 
 import 'package:trabalho1/screens/avaliar.dart';
+import 'package:trabalho1/screens/cadastro.dart';
 
 class Movie {
   final String title;
