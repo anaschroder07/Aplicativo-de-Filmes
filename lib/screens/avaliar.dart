@@ -89,10 +89,12 @@ class _AvaliarState extends State<Avaliar> {
                             : _widgetsValues.get('slider').toString();
                         reviewController.text = review;
                         ratingController.text = rating;
-                        Note note =
-                            Note.withData(review: review, rating: rating);
+                        Note note = Note.withData(
+                            movie: widget.movie.title,
+                            review: review,
+                            rating: rating);
                         BlocProvider.of<ManageBloc>(context)
-                            .add(SubmitEvent(note: note, filmeId: "jonas"));
+                            .add(SubmitEvent(note: note));
                       }
 
                       Navigator.pop(context);

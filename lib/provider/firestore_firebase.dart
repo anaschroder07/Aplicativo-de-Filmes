@@ -18,38 +18,14 @@ class FirestoreDatabase {
 
   FirestoreDatabase._createInstance();
 
-  insertNote(Note note, String filmeId) async {
-    if (username.isEmpty || filmeId.isEmpty) {
-      // Verifica se userId ou filmeId estão vazios
-      if (filmeId.isEmpty) {
-        print("filme");
-      }
-      if (username.isEmpty) {
-        print("username");
-      }
-      print('Erro: userId ou filmeId estão vazios.');
-      return;
-    }
-
-    DocumentReference userDocRef = noteCollection.doc(username);
-    DocumentSnapshot userDoc = await userDocRef.get();
-
-    if (!userDoc.exists) {
-      // O documento do usuário não existe, então vamos criá-lo
-      await userDocRef.set({});
-    }
-
-    // Agora, podemos adicionar a nota à coleção do usuário
-    DocumentReference noteDocRef = userDocRef.collection(filmeId).doc();
-    await noteDocRef.set({"review": note.review, "rating": note.rating});
+  insertNote(Note note) async {
+    noteCollection.doc(username).collection(note.movie).add(
+        {"movie": note.movie, "review": note.review, "rating": note.rating});
   }
 
   updateNote(String noteId, Note note) async {
-    noteCollection
-        .doc(uid)
-        .collection("my_notes")
-        .doc(noteId)
-        .update({"review": note.review, "rating": note.rating});
+    noteCollection.doc(uid).collection("my_notes").doc(noteId).update(
+        {"movie": note.movie, "review": note.review, "rating": note.rating});
   }
 
   deleteNote(String noteId) async {

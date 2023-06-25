@@ -1,20 +1,21 @@
 class Note {
+  String movie = "";
   String review = "";
   String rating = "";
-
   Note() {
     review = "";
     rating = "";
   }
 
-  Note.withData({this.review = "", this.rating = ""});
+  Note.withData({this.movie = "", this.review = "", this.rating = ""});
 
   Note.fromMap(map) {
+    movie = map["movie"];
     review = map["review"];
     rating = map["rating"];
   }
 
   toMap() {
-    return {"review": review, "rating": rating};
+    return {"movie": movie, "review": review, "rating": rating};
   }
 }

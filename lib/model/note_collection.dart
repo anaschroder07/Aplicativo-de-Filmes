@@ -16,6 +16,7 @@ class NoteCollection {
   Note getNoteAtIndex(int index) {
     Note note = noteList[index];
     return Note.withData(
+      movie: note.movie,
       review: note.review,
       rating: note.rating,
     );
@@ -42,6 +43,7 @@ class NoteCollection {
       idList.add(id);
       noteList.add(
         Note.withData(
+          movie: note.movie,
           review: note.review,
           rating: note.rating,
         ),
@@ -52,7 +54,8 @@ class NoteCollection {
   updateNoteOfId(String id, Note note) {
     int index = getIndexOfId(id);
     if (index != -1) {
-      noteList[index] = Note.withData(review: note.review, rating: note.rating);
+      noteList[index] = Note.withData(
+          movie: note.movie, review: note.review, rating: note.rating);
     }
   }
 
@@ -68,6 +71,7 @@ class NoteCollection {
     idList.add(id);
     noteList.add(
       Note.withData(
+        movie: note.movie,
         review: note.review,
         rating: note.rating,
       ),
