@@ -1,4 +1,30 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+//import 'package:trabalho1/screens/assistidos.dart';
+//import 'package:trabalho1/screens/catalogo.dart';
+
+import '../bloc/manage_db_bloc.dart';
+import '../model/note.dart';
+import 'catalogo.dart';
+
+final _widgetsValues = Hive.box("widgets_values");
+
+class Avaliar extends StatefulWidget {
+  final Movie movie;
+  const Avaliar({super.key, required this.movie});
+
+  @override
+  State<Avaliar> createState() => _AvaliarState();
+}
+
+final ratingController = TextEditingController();
+
+class _AvaliarState extends State<Avaliar> {
+  final GlobalKey<FormState> formkey = GlobalKey();
+
+  final reviewController = TextEditingController();
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,50 +39,74 @@ import 'package:trabalho1/screens/catalogo.dart';
 import '../logic/manage_local_db_bloc.dart';
 
 final Review review = new Review();
+    ManageBloc blocInstance = BlocProvider.of<ManageBloc>(context);
+    return BlocListener<ManageBloc, ManageState>(
+      bloc: blocInstance,
+      listener: (context, state) {
+        if (state is UpdateState) {
+          reviewController.text = state.previousNote.review == null
+              ? "Não avaliado"
+              : state.previousNote.review.toString();
+          ratingController.text = state.previousNote.rating == null
+              ? "Não avaliado"
+              : state.previousNote.rating.toString();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child: Form(
+              key: formkey,
+              child: Column(
+                children: [
+                  Container(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        widget.movie.title,
+                        style: TextStyle(fontSize: 32),
+                      )),
+                  Container(
+                    alignment: Alignment.center,
+                    width: 300,
+                    height: 300,
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(0),
+                    child: Image.network(widget.movie.imageUrl),
+                  ),
+                  SizedBox(
+                      width: 600,
+                      child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(widget.movie.description))),
+                  avaliacao(),
+                  const Nota(),
+                  ElevatedButton(
+                      //child: const Text("Enviar"),
+                      onPressed: () {
+                    if (formkey.currentState!.validate()) {
+                      formkey.currentState!.save();
+                      String review = _widgetsValues.get('review') == null
+                          ? "Sem avaliação"
+                          : _widgetsValues.get('review').toString();
+                      String rating = _widgetsValues.get('rating') == null
+                          ? "Sem avaliação"
+                          : _widgetsValues.get('rating').toString();
 
-class Avaliar extends StatelessWidget {
-  Avaliar({super.key});
+                      Note note = Note.withData(review: review, rating: rating);
+                      BlocProvider.of<ManageBloc>(context).add(SubmitEvent(
+                        note: note,
+                      ));
+                      reviewController.text = "";
+                      ratingController.text = "";
+                    }
 
-  final Review review = new Review();
-  
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider (providers: [
-      BlocProvider(create: (_) => ManageBloc()),
-      BlocProvider(create: (_) => MonitorBloc())
-    ], 
-    child: Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          child: Form(
-            child: Column(
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: const Text(
-                      "Jonh Wick - Baba Yaga",
-                      style: TextStyle(fontSize: 32),
-                    )),
-                Container(
-                  alignment: Alignment.center,
-                  width: 300,
-                  height: 300,
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.all(0),
-                  child: Image.network(
-                      'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvfkYNcjh7mncO6XPUlv611d5yqHUkGZMjGq8PXmKzGqeyC23A'),
-                ),
-                SizedBox(
-                    width: 600,
-                    child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: const Text(
-                            "Com o preço por sua cabeça cada vez maior, o lendário assassino de aluguel John Wick leva sua luta contra o High Table global enquanto procura os jogadores mais poderosos do submundo, de Nova York a Paris, do Japão a Berlim."))),
-                avaliacao(),
-                const Nota(),
-                ElevatedButton(
-                  child: const Text("Enviar"),
-                  onPressed: () {
                     Navigator.pop(context);
                     const snackBar = SnackBar(
                       content: Text(
@@ -66,40 +116,44 @@ class Avaliar extends StatelessWidget {
                       backgroundColor: Colors.blueAccent,
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    BlocProvider.of<ManageBloc>(context).add(SubmitEvent(review: review));
-                    
-                  },
-                ),
-              ],
+                  }, child: BlocBuilder<ManageBloc, ManageState>(
+                    builder: (context, state) {
+                      return (state is UpdateState
+                          ? const Text("Update")
+                          : const Text(
+                              "Insert",
+                            ));
+                    },
+                  )),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
-}
 
-Widget avaliacao() {
-  return SizedBox(
-    width: 600,
-    child: TextFormField(
-      keyboardType: TextInputType.text,
-      validator: (String? inValue) {
-        if (inValue != null) {
-          if (inValue.isEmpty) {
-            return "Insira aqui sua avaliação";
+  Widget avaliacao() {
+    return SizedBox(
+      width: 600,
+      child: TextFormField(
+        controller: reviewController,
+        keyboardType: TextInputType.text,
+        validator: (String? inValue) {
+          if (inValue != null) {
+            if (inValue.isEmpty) {
+              return "Insira aqui sua avaliação";
+            }
           }
-        }
-        return null;
-      },
-      onSaved: (value){
-        review.comment = value!;
-      },
-      decoration: const InputDecoration(
-        labelText: "Avalie aqui",
+          return null;
+        },
+        decoration: const InputDecoration(
+          labelText: "Avalie aqui",
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class Nota extends StatefulWidget {
@@ -110,24 +164,26 @@ class Nota extends StatefulWidget {
 }
 
 class _NotaState extends State<Nota> {
-  double _currentSliderValue = 0;
-
-  final _widgetsValues = Hive.box("widgets_values");
+  double _currentSliderValue = 0.0;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 600,
       child: Slider(
+          //controller: ratingController,
           value: (_widgetsValues.get('slider') == null
               ? _currentSliderValue
               : _widgetsValues.get('slider')),
           max: 5,
           divisions: 10,
-          label: _widgetsValues.get('slider').toString(),
+          label: "jonas", //(_widgetsValues.get('slider') ?? 0.0).toString(),
           onChanged: (double value) {
             setState(() {
               _widgetsValues.put('slider', value);
               _currentSliderValue = value;
+              ratingController.text = _widgetsValues.get('rating') == null
+                  ? "Sem avaliação"
+                  : _widgetsValues.get('rating').toString();
             });
             review.stars = value;
           }),
