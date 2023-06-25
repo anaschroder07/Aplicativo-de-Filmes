@@ -4,7 +4,7 @@ import 'package:trabalho1/screens/assistidos.dart';
 import 'package:trabalho1/screens/cadastro.dart';
 import 'package:trabalho1/screens/catalogo.dart';
 //import 'package:trabalho1/screens/login.dart';
-
+//imageFeature
 //import '../bloc/manage_bloc.dart';
 //import '../bloc/monitor_bloc.dart';
 //import 'add_note.dart';
