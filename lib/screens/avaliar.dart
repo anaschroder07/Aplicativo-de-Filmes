@@ -90,9 +90,11 @@ class _AvaliarState extends State<Avaliar> {
                         reviewController.text = review;
                         ratingController.text = rating;
                         Note note = Note.withData(
-                            movie: widget.movie.title,
-                            review: review,
-                            rating: rating);
+                          movie: widget.movie.title,
+                          review: review,
+                          rating: rating,
+                          movieUrl: widget.movie.imageUrl.toString(),
+                        );
                         BlocProvider.of<ManageBloc>(context)
                             .add(SubmitEvent(note: note));
                       }

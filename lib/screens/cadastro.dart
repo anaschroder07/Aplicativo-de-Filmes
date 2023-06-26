@@ -158,6 +158,7 @@ class _CadastrarState extends State<Cadastrar> {
                     },
                   ),
                 ),
+                SizedBox(height: 16)
               ],
             ),
           ),

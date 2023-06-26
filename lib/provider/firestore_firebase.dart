@@ -17,8 +17,12 @@ class FirestoreDatabase {
   String? uid;
   FirestoreDatabase._createInstance();
   insertNote(Note note) async {
-    noteCollection.doc(username).collection(username).doc(note.movie).set(
-        {"movie": note.movie, "review": note.review, "rating": note.rating});
+    noteCollection.doc(username).collection(username).doc(note.movie).set({
+      "movie": note.movie,
+      "review": note.review,
+      "rating": note.rating,
+      "movieUrl": note.movieUrl
+    });
   }
 
   updateNote(String noteId, Note note) async {

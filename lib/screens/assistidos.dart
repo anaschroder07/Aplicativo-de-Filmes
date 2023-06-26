@@ -29,9 +29,6 @@ class Assistidos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Assistidos'),
-      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirestoreDatabase.helper.noteCollection
             .doc(username)
@@ -52,6 +49,10 @@ class Assistidos extends StatelessWidget {
             itemBuilder: (context, index) {
               Note note = notes[index];
               return ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 7.0),
+                leading:
+                    SizedBox(height: 200, child: Image.network(note.movieUrl)),
                 title: Text(note.movie),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
