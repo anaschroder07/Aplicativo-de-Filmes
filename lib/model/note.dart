@@ -3,6 +3,7 @@ class Note {
   String review = "";
   String rating = "";
   Note() {
+    movie = "";
     review = "";
     rating = "";
   }
@@ -10,9 +11,9 @@ class Note {
   Note.withData({this.movie = "", this.review = "", this.rating = ""});
 
   Note.fromMap(map) {
-    movie = map["movie"];
-    review = map["review"];
-    rating = map["rating"];
+    movie = map["movie"] ?? "";
+    review = map["review"] ?? "";
+    rating = map["rating"] ?? "";
   }
 
   toMap() {

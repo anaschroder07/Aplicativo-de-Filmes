@@ -82,23 +82,65 @@ class _CadastrarState extends State<Cadastrar> {
                   style: TextStyle(fontSize: 32),
                 ),
                 usernameFormField(),
-                emailFormField(),
                 const SexFormField(),
                 passwordFormField(),
                 passwordConfirmationFormField(),
+                SizedBox(height: 16),
                 _imageFile != null
-                    ? Image.file(_imageFile!)
-                    : Text('Nenhuma imagem selecionada'),
-                SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () => _pickImage(ImageSource.camera),
-                  child: Text('Tirar Foto'),
+                    ? ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(maxWidth: 200, maxHeight: 200),
+                        child: Image.file(_imageFile!))
+                    : const Text('Nenhuma imagem selecionada'),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 56.0,
+                      height: 56.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.8),
+                            blurRadius: 3.0,
+                            //offset: const Offset(2, 2,),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () => _pickImage(ImageSource.camera),
+                        icon: const Icon(Icons.photo_camera),
+                        iconSize: 32.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 50),
+                    Container(
+                      width: 56.0,
+                      height: 56.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.8),
+                            blurRadius: 3.0,
+                            //offset: Offset(2, 2),
+                          ),
+                        ],
+                      ),
+                      child: IconButton(
+                        onPressed: () => _pickImage(ImageSource.gallery),
+                        icon: const Icon(Icons.photo_album),
+                        iconSize: 32.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () => _pickImage(ImageSource.gallery),
-                  child: Text('Selecionar da Galeria'),
-                ),
-                SizedBox(height: 16.0),
                 Container(
                   width: 170,
                   height: 50,
@@ -128,36 +170,11 @@ class _CadastrarState extends State<Cadastrar> {
   Widget usernameFormField() {
     return TextFormField(
       initialValue: _widgetsValues.get('username'),
-      keyboardType: TextInputType.name,
-      validator: (String? inValue) {
-        if (inValue != null) {
-          if (inValue.isEmpty) {
-            return "Nome de usuário";
-          }
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        hintText: "Insira seu username",
-        labelText: "Nome de usuário",
-      ),
-      onChanged: (value) {
-        _widgetsValues.put('username', value);
-      },
-      onSaved: (String? inValue) {
-        username = inValue!;
-      },
-    );
-  }
-
-  Widget emailFormField() {
-    return TextFormField(
-      initialValue: _widgetsValues.get('email'),
       keyboardType: TextInputType.emailAddress,
       validator: (String? inValue) {
         if (inValue != null) {
           if (inValue.isEmpty) {
-            return "Insira seu email";
+            return "Insira seu e-mail";
           }
         }
         return null;
@@ -167,10 +184,10 @@ class _CadastrarState extends State<Cadastrar> {
         labelText: "E-mail",
       ),
       onChanged: (value) {
-        _widgetsValues.put('email', value);
+        _widgetsValues.put('username', value);
       },
       onSaved: (String? inValue) {
-        email = inValue!;
+        username = inValue!;
       },
     );
   }

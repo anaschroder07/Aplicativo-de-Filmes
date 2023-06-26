@@ -35,6 +35,7 @@ class NoteCollection {
     if (index != -1) {
       // Update
       noteList[index] = Note.withData(
+        movie: note.movie,
         review: note.review,
         rating: note.rating,
       );

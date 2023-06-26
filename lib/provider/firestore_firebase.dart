@@ -15,22 +15,36 @@ class FirestoreDatabase {
       FirebaseFirestore.instance.collection("notes");
 
   String? uid;
-
   FirestoreDatabase._createInstance();
-
   insertNote(Note note) async {
-    noteCollection.doc(username).collection(note.movie).add(
+    noteCollection.doc(username).collection(username).doc(note.movie).set(
         {"movie": note.movie, "review": note.review, "rating": note.rating});
   }
 
   updateNote(String noteId, Note note) async {
-    noteCollection.doc(uid).collection("my_notes").doc(noteId).update(
+    noteCollection.doc(username).collection(username).doc(noteId).update(
         {"movie": note.movie, "review": note.review, "rating": note.rating});
   }
 
   deleteNote(String noteId) async {
     noteCollection.doc(uid).collection("my_notes").doc(noteId).delete();
   }
+
+  /*Future<NoteCollection> getNoteList(String username) async {
+    QuerySnapshot snapshot =
+        await noteCollection.doc(username).collection(username).get();
+    NoteCollection nc = NoteCollection();
+
+    for (DocumentSnapshot doc in snapshot.docs) {
+      Note note = Note.fromMap(doc.data());
+      String id = doc.id;
+
+      nc.insertNoteOfId(id, note);
+    }
+
+    print('notecollection:$nc');
+    return nc;
+  }*/
 
   Future<NoteCollection> getNoteList() async {
     QuerySnapshot snapshot =
@@ -50,7 +64,7 @@ class FirestoreDatabase {
   Stream get stream {
     return noteCollection
         .doc(uid)
-        .collection("my_notes")
+        .collection(username)
         .snapshots()
         .map((QuerySnapshot snapshot) {
       NoteCollection nc = NoteCollection();

@@ -1,6 +1,7 @@
 // import 'package:asdf/provider/local_database.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trabalho1/main.dart';
 
 import '../model/note_collection.dart';
 import '../provider/firestore_firebase.dart';
