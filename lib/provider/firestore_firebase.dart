@@ -27,7 +27,7 @@ class FirestoreDatabase {
   }
 
   deleteNote(String noteId) async {
-    noteCollection.doc(uid).collection("my_notes").doc(noteId).delete();
+    noteCollection.doc(username).collection(username).doc(noteId).delete();
   }
 
   /*Future<NoteCollection> getNoteList(String username) async {

@@ -24,7 +24,7 @@ Future<String> getImageUrl(fileName) async {
 }
 
 class Assistidos extends StatelessWidget {
-  const Assistidos({super.key});
+  const Assistidos({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class Assistidos extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
 
           List<Note> notes = snapshot.data!.docs.map((doc) {
@@ -59,6 +59,12 @@ class Assistidos extends StatelessWidget {
                     Text('Review: ${note.review}'),
                     Text('Rating: ${note.rating}'),
                   ],
+                ),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    FirestoreDatabase.helper.deleteNote(note.movie);
+                  },
                 ),
               );
             },

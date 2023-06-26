@@ -11,7 +11,6 @@ import '../main.dart';
 
 String caminho = "";
 String filePNG = "";
-String username = "";
 String email = "";
 String password = "";
 String userImageUrl =
